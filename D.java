@@ -1,4 +1,6 @@
 
+
+
 import java.util.ArrayList;
 
 
@@ -36,8 +38,8 @@ public class D {
 		else if(t.equals("/") || t.equals("*")) {
 			x=2;
 		}
-		else if(t.equals("sqrt") || t.equals("sq") ||  t.equals("inv") || t.equals("!") || t.equals("~")) {
-			x=6;
+		else if(t.equals("sqrt") || t.equals("sq") || t.equals("!") || t.equals("~") || t.equals("inv")) {
+			x=5;
 		}
 		else if( t.equals("max") || t.equals("min") ) {
 			x=4;
@@ -49,18 +51,12 @@ public class D {
 	}
 	private static String[] infixToRPN(String[] split) {
 		List<String> a=new ArrayList<String>();
-		Stack<String> fact=new Stack<String>();
 		Stack<String> operators=new Stack<String>();
 		for(int i=0;i<split.length;i++) {
-			if(split[i].equals("!") || split[i].equals("~")) {
-				fact.push(split[i]);
-			}
-			else if(isOperator(split[i])) {
-				while(!operators.isEmpty() && prioridades(operators.lastElement())>=prioridades(split[i])) {	
-					a.add(operators.pop());
+			if(isOperator(split[i])) {
+				while(!operators.isEmpty() && !a.isEmpty() && prioridades(operators.lastElement())>=prioridades(split[i])) {	
+						a.add(operators.pop());
 				}
-				while(!fact.isEmpty()) 
-					a.add(fact.pop());	
 				operators.push(split[i]);
 			}
 			else if(split[i].equals("(")) {
@@ -76,15 +72,7 @@ public class D {
 				}
 				}
 			}
-			else {
-				a.add(split[i]);
-				while(!fact.isEmpty()) {
-					a.add(fact.pop());
-				}
-			}
-		}
-		while(!fact.isEmpty()) {
-			a.add(fact.pop());
+			else a.add(split[i]);
 		}
 		while(!operators.isEmpty())
 			a.add(operators.pop());
